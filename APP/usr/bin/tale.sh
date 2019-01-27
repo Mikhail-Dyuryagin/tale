@@ -1,2 +1,2 @@
 #!/bin/bash
-java -jar -Dresources=/opt/src/tale-latest.jar
+java -jar /opt/src/tale-latest.jar
