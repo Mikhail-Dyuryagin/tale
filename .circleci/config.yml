@@ -22,10 +22,13 @@ jobs: # a collection of steps
       # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: /home/circleci/circleci-demo-java-spring/target/dist/tale.tar.gz
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples    
+      - persist_to_workspace:
+          root: ~/circleci-demo-java-spring
+          paths: .
   deploy:
     steps:
       - attach_workspace:
-          at: ~/repo
+          at: ~/circleci-demo-java-spring
       - run:
           name: untar
           command: tar -xvf /home/circleci/circleci-demo-java-spring/target/dist/tale.tar.gz -C /APP/opt/src
