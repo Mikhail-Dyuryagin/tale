@@ -1,0 +1,12 @@
+
+[Unit]
+Description=tale
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/tale.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
