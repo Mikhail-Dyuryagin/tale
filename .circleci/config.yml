@@ -34,7 +34,7 @@ jobs: # a collection of steps
           command: find . -type f ! -regex 'md5sum.sh' ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P ' | xargs md5sum > DEBIAN
       - run:
           name: build
-          command: fakeroot dpkg-deb --build APP
+          command: fakeroot dpkg-deb --build ~/circleci-demo-java-spring/APP
 
 workflows:
   version: 2
