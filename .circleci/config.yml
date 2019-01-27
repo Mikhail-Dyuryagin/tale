@@ -1,4 +1,5 @@
 version: 2 # use CircleCI 2.0
+jobs: # a collection of steps
   deploy:
     machine:
       enabled: true
