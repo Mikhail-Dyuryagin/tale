@@ -22,3 +22,18 @@ jobs: # a collection of steps
       # Upload test summary for display in Artifacts: https://circleci.com/docs/2.0/artifacts/
           path: /home/circleci/circleci-demo-java-spring/target/dist/tale.tar.gz
       # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples    
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: untar
+          command: tar -xvf /home/circleci/circleci-demo-java-spring/target/dist/tale.tar.gz -C /APP/opt/src
+      - run:
+          name: Push deb package
+          command: find . -type f ! -regex 'md5sum.sh' ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P ' | xargs md5sum > DEBIAN
+      - run:
+          name: build
+          command: fakeroot dpkg-deb --build APP
+
