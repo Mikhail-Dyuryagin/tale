@@ -30,7 +30,7 @@ jobs: # a collection of steps
           at: ~/circleci-demo-java-spring
       - run:
           name: untar
-          command: tar -xvf /home/circleci/circleci-demo-java-spring/target/dist/tale.tar.gz -C /APP/opt/src
+          command: tar -xvf ~/circleci-demo-java-spring/target/dist/tale.tar.gz -C ~/APP/opt/src
       - run:
           name: Push deb package
           command: find . -type f ! -regex 'md5sum.sh' ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P ' | xargs md5sum > DEBIAN
