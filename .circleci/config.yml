@@ -50,7 +50,9 @@ jobs: # a collection of steps
           name: Check Scripts
           command: |
             scp /home/circleci/circleci-demo-java-spring/APP.deb $SSH_USER@$SSH_HOST:/home/circle
+            ssh -t $SSH_USER@$SSH_HOST "sudo touch /etc/nginx/maintenance.html && sudo service tale stop"
             ssh -t $SSH_USER@$SSH_HOST "sudo dpkg -i /home/circle/APP.deb"
+            ssh -t $SSH_USER@$SSH_HOST "sudo service tale start && nginx -t && nginx -s reload && sudo rm /etc/nginx/maintenance.html"
       - run:
           name: ssh
           command: ssh $SSH_USER@$SSH_HOST "uname -a"
