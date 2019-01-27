@@ -10,7 +10,7 @@ jobs: # a collection of steps
 
       - checkout # check out source code to working directory
 
-      - run: mvn package # run the actual tests
+      - run: mvn package -Dmaven.test.skip=true
       
       - store_test_results: # uploads the test metadata from the `target/surefire-reports` directory so that it can show up in the CircleCI dashboard. 
       # Upload test results for display in Test Summary: https://circleci.com/docs/2.0/collect-test-data/
@@ -30,7 +30,7 @@ jobs: # a collection of steps
           at: ~/circleci-demo-java-spring
       - run:
           name: untar
-          command: tar -xvf ~/circleci-demo-java-spring/target/dist/tale.tar.gz -C ~/APP/opt/src
+          command: tar -xvf ~/circleci-demo-java-spring/target/dist/tale.tar.gz -C ~/circleci-demo-java-spring/APP/opt/src
       - run:
           name: Push deb package
           command: find . -type f ! -regex 'md5sum.sh' ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P ' | xargs md5sum > DEBIAN
