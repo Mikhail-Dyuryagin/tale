@@ -1,48 +1,17 @@
 version: 2 # use CircleCI 2.0
-defaults: &defaults
-  working_directory: ~/circleci-demo-java-spring
-  docker:
-    - image: circleci/openjdk:9-jdk
-jobs: # a collection of steps
-  build: # runs not using Workflows must have a `build` job as entry point
-    <<: *defaults    
-    steps: # a collection of executable commands
-
-      - checkout # check out source code to working directory
-
-      - run: mvn package -Dmaven.test.skip=true
-      
-      - store_test_results: 
-          path: target/surefire-reports
-      
-      - store_artifacts: 
-          path: /home/circleci/circleci-demo-java-spring/target/dist/tale.tar.gz
-      - persist_to_workspace:
-          root: ~/circleci-demo-java-spring
-          paths: .
   deploy:
     machine:
       enabled: true
     steps:
-      - attach_workspace:
-          at: ~/circleci-demo-java-spring
+     - add_ssh_keys:
+          fingerprints:
+            - "96:4e:9e:63:c5:19:dd:00:15:2e:10:b6:35:a7:8c:5e"
       - run:
-          name: untar
-          command: tar -xvf ~/circleci-demo-java-spring/target/dist/tale.tar.gz -C ~/circleci-demo-java-spring/APP/opt/src
-      - run:
-          name: Push deb package
-          command: find . -type f ! -regex 'md5sum.sh' ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P ' | xargs md5sum > DEBIAN
-      - run:
-          name: build
-          command: fakeroot dpkg-deb --build ~/circleci-demo-java-spring/APP
-      - store_artifacts:                                   
-          path: /home/circleci/circleci-demo-java-spring/APP.deb
+          name: ssh
+          command: ssh $SSH_USER@$SSH_HOST "uname -a"
 
 workflows:
   version: 2
   package-deploy:
     jobs:
-      - build
       - deploy:
-          requires:
-            - build
